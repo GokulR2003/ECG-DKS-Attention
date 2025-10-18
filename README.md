@@ -115,6 +115,24 @@ Below is a snapshot of the progression:
 | **Final Model Accuracy** | **96.51 %** | |
 
 ---
+### Setup Instructions
+# 1️⃣ Clone the repository
+git clone https://github.com/GokulR2003/ECG-DKS-Attention.git
+cd ECG-DKS-Attention
+
+# 2️⃣ Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate   # (on macOS/Linux)
+venv\Scripts\activate      # (on Windows)
+
+# 3️⃣ Install all dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# 4️⃣ Verify installation
+python -c "import tensorflow, wfdb, sklearn; print('✅ Setup Successful!')"
+---
+
 ### 💬 Acknowledgements
 
 This work was carried out under the Chips to Startup (C2S) Internship Programme,

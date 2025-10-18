@@ -116,21 +116,17 @@ Below is a snapshot of the progression:
 
 ---
 ### Setup Instructions
-# 1️⃣ Clone the repository
+1️⃣ Clone the repository
 git clone https://github.com/GokulR2003/ECG-DKS-Attention.git
 cd ECG-DKS-Attention
 
-# 2️⃣ Create and activate a virtual environment
-python -m venv venv
-source venv/bin/activate   # (on macOS/Linux)
-venv\Scripts\activate      # (on Windows)
+2️⃣ Install all dependencies
+- pip install --upgrade pip
+- pip install -r requirements.txt
 
-# 3️⃣ Install all dependencies
-pip install --upgrade pip
-pip install -r requirements.txt
+3️⃣ Verify installation
+- python -c "import tensorflow, wfdb, sklearn; print('✅ Setup Successful!')"
 
-# 4️⃣ Verify installation
-python -c "import tensorflow, wfdb, sklearn; print('✅ Setup Successful!')"
 ---
 
 ### 💬 Acknowledgements

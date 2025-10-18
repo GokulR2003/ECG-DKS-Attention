@@ -1,0 +1,291 @@
+PS C:\Users\gokul\OneDrive\Desktop\IITM\code> & C:/Users/gokul/AppData/Local/Programs/Python/Python312/python.exe c:/Users/gokul/OneDrive/Desktop/IITM/code/ECG.py
+2025-07-14 18:05:39.956330: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.     
+2025-07-14 18:05:40.870817: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.     
+--- Phase 1: Model Development (FP32) ---
+Loading and Preprocessing MIT-BIH Arrhythmia Database...
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|███████████████████████████████████████████████████████████████████████████████████| 43/43 [06:44<00:00,  9.42s/it] 
+
+Total heartbeats extracted: 99443
+Distribution of classes (before one-hot):
+  F: 798 (0.80%)
+  N: 87078 (87.57%)
+  Q: 1802 (1.81%)
+  S: 2750 (2.77%)
+  V: 7015 (7.05%)
+
+Training data shape: (79554, 188, 1), Labels shape: (79554, 5)
+Testing data shape: (19889, 188, 1), Labels shape: (19889, 5)
+Number of classes: 5, Class labels: ['F' 'N' 'Q' 'S' 'V']
+WARNING:tensorflow:From C:\Users\gokul\AppData\Local\Programs\Python\Python312\Lib\site-packages\keras\src\backend\tensorflow\core.py:232: The name tf.placeholder is deprecated. Please use tf.compat.v1.placeholder instead.
+
+2025-07-14 18:14:28.809214: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Output shape after DKS Block: (None, 188, 64)
+Output shape after Attention Mechanism: (None, 188, 128)
+Output shape after Conv1D (128 filters, kernel 5) and MaxPooling: (None, 94, 128)
+Output shape after Conv1D (256 filters, kernel 5) and MaxPooling: (None, 47, 256)
+Output shape after GlobalAveragePooling1D and Dropout: (None, 256)
+Output shape of Classification Head: (None, 5)
+
+--- Model Summary ---
+Model: "functional"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ input_layer (InputLayer)             │ (None, 188, 1)              │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dks_block (DynamicKernelSwitching)   │ (None, 188, 64)             │           1,743 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ attention_mechanism (SelfAttention)  │ (None, 188, 128)            │          16,769 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv1d_3 (Conv1D)                    │ (None, 188, 128)            │          82,048 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling1d (MaxPooling1D)         │ (None, 94, 128)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv1d_4 (Conv1D)                    │ (None, 94, 256)             │         164,096 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling1d_1 (MaxPooling1D)       │ (None, 47, 256)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ global_average_pooling1d             │ (None, 256)                 │               0 │
+│ (GlobalAveragePooling1D)             │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 256)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_5 (Dense)                      │ (None, 256)                 │          65,792 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_1 (Dropout)                  │ (None, 256)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_6 (Dense)                      │ (None, 5)                   │           1,285 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 331,733 (1.27 MB)
+ Trainable params: 331,733 (1.27 MB)
+ Non-trainable params: 0 (0.00 B)
+
+--- Model Training ---
+Calculated Class Weights: {0: 24.938557993730406, 1: 0.22839998851597715, 2: 11.033841886269071, 3: 7.232181818181818, 4: 2.8351389878831075}        
+Epoch 1/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 48s 39ms/step - accuracy: 0.3397 - loss: 1.3064 - val_accuracy: 0.4235 - val_loss: 1.0352
+Epoch 2/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.5077 - loss: 0.6807 - val_accuracy: 0.7779 - val_loss: 0.6797
+Epoch 3/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 46s 41ms/step - accuracy: 0.6572 - loss: 0.5182 - val_accuracy: 0.7857 - val_loss: 0.5702
+Epoch 4/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 46s 41ms/step - accuracy: 0.7513 - loss: 0.4392 - val_accuracy: 0.8518 - val_loss: 0.5859
+Epoch 5/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 71s 64ms/step - accuracy: 0.7931 - loss: 0.4061 - val_accuracy: 0.8350 - val_loss: 0.4878
+Epoch 6/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 78s 70ms/step - accuracy: 0.8101 - loss: 0.3839 - val_accuracy: 0.8572 - val_loss: 0.4727
+Epoch 7/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 58s 52ms/step - accuracy: 0.8307 - loss: 0.3518 - val_accuracy: 0.9060 - val_loss: 0.4017
+Epoch 8/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 84s 75ms/step - accuracy: 0.8380 - loss: 0.3151 - val_accuracy: 0.8884 - val_loss: 0.3814
+Epoch 9/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 66s 59ms/step - accuracy: 0.8511 - loss: 0.3024 - val_accuracy: 0.9142 - val_loss: 0.3358
+Epoch 10/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 40ms/step - accuracy: 0.8598 - loss: 0.2803 - val_accuracy: 0.8413 - val_loss: 0.4495
+Epoch 11/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.8614 - loss: 0.2768 - val_accuracy: 0.8847 - val_loss: 0.3669
+Epoch 12/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 52s 47ms/step - accuracy: 0.8695 - loss: 0.2606 - val_accuracy: 0.9285 - val_loss: 0.3073
+Epoch 13/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 50s 45ms/step - accuracy: 0.8655 - loss: 0.2792 - val_accuracy: 0.8947 - val_loss: 0.3433
+Epoch 14/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 40ms/step - accuracy: 0.8709 - loss: 0.2448 - val_accuracy: 0.8834 - val_loss: 0.3653
+Epoch 15/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 43s 39ms/step - accuracy: 0.8703 - loss: 0.2492 - val_accuracy: 0.9438 - val_loss: 0.2246
+Epoch 16/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 43s 39ms/step - accuracy: 0.8775 - loss: 0.2429 - val_accuracy: 0.9304 - val_loss: 0.2316
+Epoch 17/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.8834 - loss: 0.2408 - val_accuracy: 0.9070 - val_loss: 0.3213
+Epoch 18/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.8889 - loss: 0.2150 - val_accuracy: 0.8992 - val_loss: 0.3471
+Epoch 19/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.8879 - loss: 0.2283 - val_accuracy: 0.9446 - val_loss: 0.2036
+Epoch 20/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.8984 - loss: 0.2215 - val_accuracy: 0.9248 - val_loss: 0.2428
+Epoch 21/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.8941 - loss: 0.2142 - val_accuracy: 0.9529 - val_loss: 0.1788
+Epoch 22/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 40ms/step - accuracy: 0.8946 - loss: 0.2103 - val_accuracy: 0.8953 - val_loss: 0.2990
+Epoch 23/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 46s 41ms/step - accuracy: 0.8924 - loss: 0.2074 - val_accuracy: 0.9539 - val_loss: 0.1727
+Epoch 24/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.8975 - loss: 0.2150 - val_accuracy: 0.9276 - val_loss: 0.2423
+Epoch 25/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9007 - loss: 0.1906 - val_accuracy: 0.9267 - val_loss: 0.2872
+Epoch 26/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9039 - loss: 0.1937 - val_accuracy: 0.9108 - val_loss: 0.2551
+Epoch 27/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 43s 39ms/step - accuracy: 0.9090 - loss: 0.1873 - val_accuracy: 0.9458 - val_loss: 0.1816
+Epoch 28/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9004 - loss: 0.1929 - val_accuracy: 0.9272 - val_loss: 0.2410
+Epoch 29/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9070 - loss: 0.1753 - val_accuracy: 0.9554 - val_loss: 0.1691
+Epoch 30/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9096 - loss: 0.1904 - val_accuracy: 0.9441 - val_loss: 0.1745
+
+--- Final Model Evaluation on Test Set ---
+Test Loss: 0.1813
+Test Accuracy: 94.34%
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.      
+Model saved to /content/internship\ecg_dks_attention_model_annotation_r30.h5
+
+--- Accuracy Progression during Training (Conceptual Impact) ---
+Note: These are overall model accuracies per epoch, not layer-specific.
+Epoch 1: Training Accuracy = 39.38%, Validation Accuracy = 42.35%
+Epoch 2: Training Accuracy = 53.70%, Validation Accuracy = 77.79%
+Epoch 3: Training Accuracy = 67.96%, Validation Accuracy = 78.57%
+Epoch 4: Training Accuracy = 76.10%, Validation Accuracy = 85.18%
+Epoch 5: Training Accuracy = 80.08%, Validation Accuracy = 83.50%
+Epoch 6: Training Accuracy = 81.57%, Validation Accuracy = 85.72%
+Epoch 7: Training Accuracy = 83.47%, Validation Accuracy = 90.60%
+Epoch 8: Training Accuracy = 84.11%, Validation Accuracy = 88.84%
+Epoch 9: Training Accuracy = 85.07%, Validation Accuracy = 91.42%
+Epoch 10: Training Accuracy = 85.58%, Validation Accuracy = 84.13%
+Epoch 11: Training Accuracy = 85.75%, Validation Accuracy = 88.47%
+Epoch 12: Training Accuracy = 86.79%, Validation Accuracy = 92.85%
+Epoch 13: Training Accuracy = 86.79%, Validation Accuracy = 89.47%
+Epoch 14: Training Accuracy = 87.18%, Validation Accuracy = 88.34%
+Epoch 15: Training Accuracy = 87.00%, Validation Accuracy = 94.38%
+Epoch 16: Training Accuracy = 87.98%, Validation Accuracy = 93.04%
+Epoch 17: Training Accuracy = 88.29%, Validation Accuracy = 90.70%
+Epoch 18: Training Accuracy = 88.64%, Validation Accuracy = 89.92%
+Epoch 19: Training Accuracy = 89.10%, Validation Accuracy = 94.46%
+Epoch 20: Training Accuracy = 89.11%, Validation Accuracy = 92.48%
+Epoch 21: Training Accuracy = 89.76%, Validation Accuracy = 95.29%
+Epoch 22: Training Accuracy = 89.32%, Validation Accuracy = 89.53%
+Epoch 23: Training Accuracy = 89.57%, Validation Accuracy = 95.39%
+Epoch 24: Training Accuracy = 89.71%, Validation Accuracy = 92.76%
+Epoch 25: Training Accuracy = 89.87%, Validation Accuracy = 92.67%
+Epoch 26: Training Accuracy = 90.49%, Validation Accuracy = 91.08%
+Epoch 27: Training Accuracy = 90.34%, Validation Accuracy = 94.58%
+Epoch 28: Training Accuracy = 90.30%, Validation Accuracy = 92.72%
+Epoch 29: Training Accuracy = 90.61%, Validation Accuracy = 95.54%
+Epoch 30: Training Accuracy = 90.58%, Validation Accuracy = 94.41%
+
+--- Conceptual Accuracy Levels After Each Filter/Block (As per Research Plan) ---
+1. After Raw ECG Data:
+  - Accuracy: Highly variable, often 60-70% if directly fed to a simple classifier (very noisy).
+2. After Preprocessing (Band-pass, Notch Filters & R-peak detection/Segmentation):
+  - R-peak Detection Strategy Used: ANNOTATION
+  - Segment Window Split: 30% before R-peak, 70% after R-peak.
+  - Impact: Signal-to-Noise Ratio (SNR) significantly improved. Heartbeat segments are isolated and cleaner. Different R-peak detectors capture different nuances.
+  - Conceptual Accuracy: If a basic classifier were used on this cleaner data, accuracy could jump to 80-90%. This is the foundation.
+3. After Dynamic Kernel Switching (DKS) Block:
+  - Kernel Sizes Used: [3, 5, 7]. Filters Used: 64 per kernel size.
+  - Impact: Extracts multi-scale features, adapting to different temporal patterns in ECG.
+  - Conceptual Accuracy Improvement: Over a standard CNN with fixed kernels, DKS offers richer feature learning, potentially adding 1-3% to accuracy (e.g., from 88% to 90%).
+4. After Attention Mechanism:
+  - Units Used: 128.
+  - Impact: Allows the model to focus on the most discriminative parts of the ECG segment.
+  - Conceptual Accuracy Improvement: By highlighting crucial features, it can lead to another 2-5% accuracy boost (e.g., from 90% to 93-95%).        
+5. After Deeper CNN Layers and Final Classification Head:
+  - Conv1D Layer 1: Filters=128, Kernel=5
+  - Conv1D Layer 2: Filters=256, Kernel=5
+  - Impact: Further learns abstract representations and performs final classification.
+  - Final Achieved Accuracy (on Test Set): 94.34% (This is the result of the entire model).
+
+--- Phase 2: Model Quantization ---
+Attempting to load model from: /content/internship\ecg_dks_attention_model_annotation_r30.h5
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+Model loaded successfully for quantization!
+
+--- Starting Post-Training Dynamic Range Quantization ---
+This method quantizes weights to 8-bit integers and dynamically quantizes activations during inference.
+It's a good balance of model size reduction, speedup, and minimal accuracy loss.
+Saved artifact at 'C:\Users\gokul\AppData\Local\Temp\tmpkq1ihy6h'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 188, 1), dtype=tf.float32, name='input_layer')
+Output Type:
+  TensorSpec(shape=(None, 5), dtype=tf.float32, name=None)
+Captures:
+  2665980296656: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980294352: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980296848: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980295120: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980296464: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980293968: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980297040: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980295696: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980294544: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095035984: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2665980295504: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095035600: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095050576: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095037136: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095036176: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095034832: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095034640: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095035792: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095035408: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095034448: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095050000: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095038480: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095036944: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2666095036368: TensorSpec(shape=(), dtype=tf.resource, name=None)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1752498564.221291   27544 tf_tfl_flatbuffer_helpers.cc:365] Ignored output_format.
+W0000 00:00:1752498564.229324   27544 tf_tfl_flatbuffer_helpers.cc:368] Ignored drop_control_dependency.
+2025-07-14 18:39:24.260790: I tensorflow/cc/saved_model/reader.cc:83] Reading SavedModel from: C:\Users\gokul\AppData\Local\Temp\tmpkq1ihy6h
+2025-07-14 18:39:24.287676: I tensorflow/cc/saved_model/reader.cc:52] Reading meta graph with tags { serve }
+2025-07-14 18:39:24.287932: I tensorflow/cc/saved_model/reader.cc:147] Reading SavedModel debug info (if present) from: C:\Users\gokul\AppData\Local\Temp\tmpkq1ihy6h
+I0000 00:00:1752498564.321588   27544 mlir_graph_optimization_pass.cc:425] MLIR V1 optimization pass is not enabled
+2025-07-14 18:39:24.333736: I tensorflow/cc/saved_model/loader.cc:236] Restoring SavedModel bundle.
+2025-07-14 18:39:24.594675: I tensorflow/cc/saved_model/loader.cc:220] Running initialization op on SavedModel bundle at path: C:\Users\gokul\AppData\Local\Temp\tmpkq1ihy6h
+2025-07-14 18:39:24.633671: I tensorflow/cc/saved_model/loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 380765 microseconds.
+2025-07-14 18:39:25.302398: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+
+Post-Training Dynamic Range Quantization successful!
+Quantized model saved to: /content/internship\ecg_dks_attention_model_quantized_dynamic_range_annotation_r30.tflite
+
+--- Verifying Quantized TFLite Model ---
+C:\Users\gokul\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+Loading test data for TFLite model verification...
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|█████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:38<00:00,  7.78s/it] 
+
+Total heartbeats extracted: 10752
+Distribution of classes (before one-hot):
+  F: 4 (0.04%)
+  N: 10680 (99.33%)
+  S: 12 (0.11%)
+  V: 56 (0.52%)
+
+Running inference on 5 test samples with TFLite model...
+Sample 1: True Label: N, Predicted Label: N
+Sample 2: True Label: N, Predicted Label: N
+Sample 3: True Label: N, Predicted Label: N
+Sample 4: True Label: N, Predicted Label: N
+Sample 5: True Label: N, Predicted Label: N
+
+TFLite model verification complete.
+
+--- Phase 3: RTL Generation (Conceptual) ---
+With the .tflite model, you can now proceed to hardware deployment.
+This involves specialized tools like hls4ml (for FPGAs) or other hardware-specific compilers to translate the quantized model into Hardware Description Languages (Verilog/SystemVerilog/VHDL).
+This phase includes simulation with testbenches and eventual implementation on FPGA/ASIC for real-time inference.
+
+--- Conceptual: Quantization Aware Training (QAT) ---
+If the accuracy of the Post-Training Quantized model is not satisfactory,
+Quantization Aware Training (QAT) is the next step. This involves:
+1. Applying `tfmot.quantization.keras.quantize_model` to your original Keras model.
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+ # quantized_model_for_qat.compile(...)
+ # quantized_model_for_qat.fit(X_train, y_train, ...)
+ # converter_qat = tf.lite.TFLiteConverter.from_keras_model(quantized_model_for_qat)
+ # converter_qat.optimizations = [tf.lite.Optimize.DEFAULT]
+ # tflite_qat_model = converter_qat.convert()

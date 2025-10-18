@@ -1,0 +1,53 @@
+# ==============================
+# ECG-DKS-SelfAttention Project
+# Ultra Low Power Edge AI ECG Classifier
+# ==============================
+
+# --- Core Libraries ---
+numpy==1.26.4
+scipy==1.14.1
+matplotlib==3.9.2
+pandas==2.2.3
+
+# --- Machine Learning / Deep Learning ---
+tensorflow==2.17.0
+tensorflow-model-optimization==0.8.0
+scikit-learn==1.5.2
+
+# --- ECG Data Handling & Signal Processing ---
+wfdb==4.1.2
+tqdm==4.66.4
+
+# --- Visualization & Analysis ---
+seaborn==0.13.2
+notebook==7.2.2
+
+# --- Optional but Recommended ---
+# For advanced debugging, reproducibility, and version control
+jupyterlab==4.2.5
+h5py==3.11.0
+protobuf==4.25.4
+
+# --- OS / File Management ---
+# (Automatically included in Python, listed for clarity)
+os-sys
+pathlib
+
+# --- For Model Conversion / Quantization ---
+flatbuffers==24.3.25
+opt-einsum==3.3.0
+
+# --- Hardware / Deployment (optional) ---
+# If you plan to convert .tflite → Verilog via hls4ml
+hls4ml==0.9.0
+onnx==1.17.0
+onnxruntime==1.19.2
+
+# --- GPU Support (optional) ---
+# Uncomment these if you are using a GPU setup
+# tensorflow-gpu==2.17.0
+# cupy-cuda12x==13.2.0
+
+# --- Utility / Logging ---
+absl-py==2.1.0
+tensorboard==2.17.0

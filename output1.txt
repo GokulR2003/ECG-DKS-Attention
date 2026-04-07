@@ -1,0 +1,365 @@
+2025-07-20 21:33:25.036431: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-07-20 21:33:26.721681: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+--- Phase 1: Model Development (FP32) ---
+Loading and Preprocessing MIT-BIH Arrhythmia Database...
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|███████████████████████████████████████████████████████████████████████████████████| 43/43 [12:03<00:00, 16.82s/it]
+
+Total heartbeats extracted: 99443
+Distribution of classes (before one-hot):
+  F: 798 (0.80%)
+  N: 87078 (87.57%)
+  Q: 1802 (1.81%)
+  S: 2750 (2.77%)
+  V: 7015 (7.05%)
+
+Training data shape: (79554, 188, 1), Labels shape: (79554, 5)
+Testing data shape: (19889, 188, 1), Labels shape: (19889, 5)
+Number of classes: 5, Class labels: ['F' 'N' 'Q' 'S' 'V']
+WARNING:tensorflow:From C:\Users\gokul\AppData\Local\Programs\Python\Python312\Lib\site-packages\keras\src\backend\tensorflow\core.py:232: The name tf.placeholder is deprecated. Please use tf.compat.v1.placeholder instead.
+
+2025-07-20 21:46:12.962956: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Output shape after DKS Block: (None, 188, 64)
+Output shape after Attention Mechanism: (None, 188, 128)
+Output shape after Dilated Conv1D (128 filters, rate 2) and MaxPooling: (None, 94, 128)
+Output shape after Dilated Conv1D (256 filters, rate 4) and MaxPooling: (None, 47, 256)
+Output shape after GlobalAveragePooling1D and Dropout: (None, 256)
+Output shape of Classification Head: (None, 5)
+
+--- Model Summary ---
+Model: "functional"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ input_layer (InputLayer)             │ (None, 188, 1)              │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dks_block (DynamicKernelSwitching)   │ (None, 188, 64)             │           1,743 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ attention_mechanism (SelfAttention)  │ (None, 188, 128)            │          16,769 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv1d_3 (Conv1D)                    │ (None, 188, 128)            │          82,048 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling1d (MaxPooling1D)         │ (None, 94, 128)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv1d_4 (Conv1D)                    │ (None, 94, 256)             │         164,096 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling1d_1 (MaxPooling1D)       │ (None, 47, 256)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ global_average_pooling1d             │ (None, 256)                 │               0 │
+│ (GlobalAveragePooling1D)             │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 256)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_5 (Dense)                      │ (None, 256)                 │          65,792 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_1 (Dropout)                  │ (None, 256)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_6 (Dense)                      │ (None, 5)                   │           1,285 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 331,733 (1.27 MB)
+ Trainable params: 331,733 (1.27 MB)
+ Non-trainable params: 0 (0.00 B)
+
+--- Model Training ---
+Calculated Class Weights: {0: 24.938557993730406, 1: 0.22839998851597715, 2: 11.033841886269071, 3: 7.232181818181818, 4: 2.8351389878831075}        
+Epoch 1/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 49s 41ms/step - accuracy: 0.4027 - loss: 1.1614 - val_accuracy: 0.5444 - val_loss: 0.9260
+Epoch 2/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 46s 41ms/step - accuracy: 0.6827 - loss: 0.5105 - val_accuracy: 0.8543 - val_loss: 0.5352
+Epoch 3/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 48s 42ms/step - accuracy: 0.8108 - loss: 0.3983 - val_accuracy: 0.7391 - val_loss: 0.7914
+Epoch 4/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 48s 43ms/step - accuracy: 0.8469 - loss: 0.3192 - val_accuracy: 0.8768 - val_loss: 0.4103
+Epoch 5/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 70s 63ms/step - accuracy: 0.8548 - loss: 0.2945 - val_accuracy: 0.8607 - val_loss: 0.4812
+Epoch 6/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 97s 87ms/step - accuracy: 0.8719 - loss: 0.2680 - val_accuracy: 0.9393 - val_loss: 0.2648
+Epoch 7/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 96s 85ms/step - accuracy: 0.8815 - loss: 0.2587 - val_accuracy: 0.9487 - val_loss: 0.2207
+Epoch 8/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 98s 87ms/step - accuracy: 0.8832 - loss: 0.2336 - val_accuracy: 0.9404 - val_loss: 0.2549
+Epoch 9/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 96s 86ms/step - accuracy: 0.8869 - loss: 0.2280 - val_accuracy: 0.9535 - val_loss: 0.1786
+Epoch 10/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 97s 86ms/step - accuracy: 0.8830 - loss: 0.2228 - val_accuracy: 0.9359 - val_loss: 0.1982
+Epoch 11/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 101s 91ms/step - accuracy: 0.8980 - loss: 0.1773 - val_accuracy: 0.9253 - val_loss: 0.2465
+Epoch 12/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 124s 111ms/step - accuracy: 0.9080 - loss: 0.1732 - val_accuracy: 0.9559 - val_loss: 0.1686
+Epoch 13/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 140s 109ms/step - accuracy: 0.9094 - loss: 0.1664 - val_accuracy: 0.9437 - val_loss: 0.1871
+Epoch 14/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 141s 108ms/step - accuracy: 0.9027 - loss: 0.1688 - val_accuracy: 0.9038 - val_loss: 0.2908
+Epoch 15/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 86s 76ms/step - accuracy: 0.9207 - loss: 0.1431 - val_accuracy: 0.9164 - val_loss: 0.2516
+Epoch 16/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 42s 38ms/step - accuracy: 0.9130 - loss: 0.1498 - val_accuracy: 0.9393 - val_loss: 0.1943
+Epoch 17/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9263 - loss: 0.1297 - val_accuracy: 0.9380 - val_loss: 0.1826
+Epoch 18/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9202 - loss: 0.1517 - val_accuracy: 0.9662 - val_loss: 0.1263
+Epoch 19/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 39ms/step - accuracy: 0.9253 - loss: 0.1328 - val_accuracy: 0.8847 - val_loss: 0.3133
+Epoch 20/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 40ms/step - accuracy: 0.9222 - loss: 0.1270 - val_accuracy: 0.9598 - val_loss: 0.1491
+Epoch 21/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 44s 40ms/step - accuracy: 0.9188 - loss: 0.1433 - val_accuracy: 0.9162 - val_loss: 0.2348
+Epoch 22/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9307 - loss: 0.1093 - val_accuracy: 0.8971 - val_loss: 0.2544
+Epoch 23/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9230 - loss: 0.1268 - val_accuracy: 0.9656 - val_loss: 0.1094
+Epoch 24/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9317 - loss: 0.1181 - val_accuracy: 0.9472 - val_loss: 0.1536
+Epoch 25/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 41ms/step - accuracy: 0.9305 - loss: 0.1175 - val_accuracy: 0.9400 - val_loss: 0.1783
+Epoch 26/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9392 - loss: 0.0991 - val_accuracy: 0.9637 - val_loss: 0.1108
+Epoch 27/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9309 - loss: 0.1150 - val_accuracy: 0.9498 - val_loss: 0.1546
+Epoch 28/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 40ms/step - accuracy: 0.9388 - loss: 0.1054 - val_accuracy: 0.9481 - val_loss: 0.1316
+Epoch 29/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 41ms/step - accuracy: 0.9295 - loss: 0.1289 - val_accuracy: 0.9452 - val_loss: 0.1369
+Epoch 30/30
+1119/1119 ━━━━━━━━━━━━━━━━━━━━ 45s 41ms/step - accuracy: 0.9341 - loss: 0.1197 - val_accuracy: 0.9471 - val_loss: 0.1330
+
+--- Final Model Evaluation on Test Set ---
+Test Loss: 0.1426
+Test Accuracy: 94.51%
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.      
+Model saved to /content/internship\ecg_dks_attention_model_annotation_r30.h5
+
+--- Accuracy Progression during Training (Conceptual Impact) ---
+Note: These are overall model accuracies per epoch, not layer-specific.
+Epoch 1: Training Accuracy = 47.43%, Validation Accuracy = 54.44%
+Epoch 2: Training Accuracy = 72.61%, Validation Accuracy = 85.43%
+Epoch 3: Training Accuracy = 81.66%, Validation Accuracy = 73.91%
+Epoch 4: Training Accuracy = 84.78%, Validation Accuracy = 87.68%
+Epoch 5: Training Accuracy = 86.06%, Validation Accuracy = 86.07%
+Epoch 6: Training Accuracy = 87.40%, Validation Accuracy = 93.93%
+Epoch 7: Training Accuracy = 87.67%, Validation Accuracy = 94.87%
+Epoch 8: Training Accuracy = 88.42%, Validation Accuracy = 94.04%
+Epoch 9: Training Accuracy = 88.72%, Validation Accuracy = 95.35%
+Epoch 10: Training Accuracy = 89.50%, Validation Accuracy = 93.59%
+Epoch 11: Training Accuracy = 89.85%, Validation Accuracy = 92.53%
+Epoch 12: Training Accuracy = 90.21%, Validation Accuracy = 95.59%
+Epoch 13: Training Accuracy = 90.62%, Validation Accuracy = 94.37%
+Epoch 14: Training Accuracy = 90.69%, Validation Accuracy = 90.38%
+Epoch 15: Training Accuracy = 91.58%, Validation Accuracy = 91.64%
+Epoch 16: Training Accuracy = 91.28%, Validation Accuracy = 93.93%
+Epoch 17: Training Accuracy = 92.19%, Validation Accuracy = 93.80%
+Epoch 18: Training Accuracy = 92.04%, Validation Accuracy = 96.62%
+Epoch 19: Training Accuracy = 92.38%, Validation Accuracy = 88.47%
+Epoch 20: Training Accuracy = 92.44%, Validation Accuracy = 95.98%
+Epoch 21: Training Accuracy = 92.45%, Validation Accuracy = 91.62%
+Epoch 22: Training Accuracy = 93.03%, Validation Accuracy = 89.71%
+Epoch 23: Training Accuracy = 92.63%, Validation Accuracy = 96.56%
+Epoch 24: Training Accuracy = 92.67%, Validation Accuracy = 94.72%
+Epoch 25: Training Accuracy = 92.92%, Validation Accuracy = 94.00%
+Epoch 26: Training Accuracy = 93.81%, Validation Accuracy = 96.37%
+Epoch 27: Training Accuracy = 92.99%, Validation Accuracy = 94.98%
+Epoch 28: Training Accuracy = 93.50%, Validation Accuracy = 94.81%
+Epoch 29: Training Accuracy = 93.27%, Validation Accuracy = 94.52%
+Epoch 30: Training Accuracy = 93.19%, Validation Accuracy = 94.71%
+
+--- Conceptual Accuracy Levels After Each Filter/Block (As per Research Plan) ---
+1. After Raw ECG Data:
+  - Accuracy: Highly variable, often 60-70% if directly fed to a simple classifier (very noisy).
+2. After Preprocessing (Band-pass, Notch Filters & R-peak detection/Segmentation):
+  - R-peak Detection Strategy Used: ANNOTATION
+  - Segment Window Split: 30% before R-peak, 70% after R-peak.
+  - Impact: Signal-to-Noise Ratio (SNR) significantly improved. Heartbeat segments are isolated and cleaner. Different R-peak detectors capture different nuances.
+  - Conceptual Accuracy: If a basic classifier were used on this cleaner data, accuracy could jump to 80-90%. This is the foundation.
+3. After Dynamic Kernel Switching (DKS) Block:
+  - Kernel Sizes Used: [3, 5, 7]. Filters Used: 64 per kernel size.
+  - Impact: Extracts multi-scale features, adapting to different temporal patterns in ECG.
+  - Conceptual Accuracy Improvement: Over a standard CNN with fixed kernels, DKS offers richer feature learning, potentially adding 1-3% to accuracy (e.g., from 88% to 90%).
+4. After Attention Mechanism:
+  - Units Used: 128.
+  - Impact: Allows the model to focus on the most discriminative parts of the ECG segment.
+  - Conceptual Accuracy Improvement: By highlighting crucial features, it can lead to another 2-5% accuracy boost (e.g., from 90% to 93-95%).        
+5. After Deeper CNN Layers and Final Classification Head:
+  - Conv1D Layer 1: Filters=128, Kernel=5
+  - Conv1D Layer 2: Filters=256, Kernel=5
+  - Impact: Further learns abstract representations and performs final classification.
+  - Final Achieved Accuracy (on Test Set): 94.51% (This is the result of the entire model).
+
+--- Phase 2: Model Quantization ---
+Attempting to load model from: /content/internship\ecg_dks_attention_model_annotation_r30.h5
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+Model loaded successfully for quantization!
+
+--- Starting Post-Training Dynamic Range Quantization ---
+This method quantizes weights to 8-bit integers and dynamically quantizes activations during inference.
+It's a good balance of model size reduction, speedup, and minimal accuracy loss.
+Saved artifact at 'C:\Users\gokul\AppData\Local\Temp\tmpcmpvmv1c'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 188, 1), dtype=tf.float32, name='input_layer')
+Output Type:
+  TensorSpec(shape=(None, 5), dtype=tf.float32, name=None)
+Captures:
+  1649998673104: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998674064: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998674448: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998673872: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998674256: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998675408: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998673488: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998674640: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998671760: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998671184: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998673680: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998671376: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998674832: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998675024: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998675216: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998671568: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998672912: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649998670608: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649930449936: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649930450320: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649930449744: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649930449360: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649930450128: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  1649930446480: TensorSpec(shape=(), dtype=tf.resource, name=None)
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1753030185.345129   24104 tf_tfl_flatbuffer_helpers.cc:365] Ignored output_format.
+W0000 00:00:1753030185.346673   24104 tf_tfl_flatbuffer_helpers.cc:368] Ignored drop_control_dependency.
+2025-07-20 22:19:45.348695: I tensorflow/cc/saved_model/reader.cc:83] Reading SavedModel from: C:\Users\gokul\AppData\Local\Temp\tmpcmpvmv1c
+2025-07-20 22:19:45.351547: I tensorflow/cc/saved_model/reader.cc:52] Reading meta graph with tags { serve }
+2025-07-20 22:19:45.351651: I tensorflow/cc/saved_model/reader.cc:147] Reading SavedModel debug info (if present) from: C:\Users\gokul\AppData\Local\Temp\tmpcmpvmv1c
+I0000 00:00:1753030185.365032   24104 mlir_graph_optimization_pass.cc:425] MLIR V1 optimization pass is not enabled
+2025-07-20 22:19:45.368101: I tensorflow/cc/saved_model/loader.cc:236] Restoring SavedModel bundle.
+2025-07-20 22:19:45.443599: I tensorflow/cc/saved_model/loader.cc:220] Running initialization op on SavedModel bundle at path: C:\Users\gokul\AppData\Local\Temp\tmpcmpvmv1c
+2025-07-20 22:19:45.463117: I tensorflow/cc/saved_model/loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 114804 microseconds.
+2025-07-20 22:19:45.515535: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+
+Post-Training Dynamic Range Quantization successful!
+Quantized model saved to: /content/internship\ecg_dks_attention_model_quantized_dynamic_range_annotation_r30.tflite
+
+--- Verifying Quantized TFLite Model ---
+C:\Users\gokul\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+Loading test data for TFLite model verification...
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|█████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:48<00:00,  9.66s/it] 
+
+Total heartbeats extracted: 10752
+Distribution of classes (before one-hot):
+  F: 4 (0.04%)
+  N: 10680 (99.33%)
+  S: 12 (0.11%)
+  V: 56 (0.52%)
+
+Running inference on 5 test samples with TFLite model...
+Sample 1: True Label: N, Predicted Label: N
+Sample 2: True Label: N, Predicted Label: N
+Sample 3: True Label: N, Predicted Label: N
+Sample 4: True Label: N, Predicted Label: N
+Sample 5: True Label: N, Predicted Label: N
+
+TFLite model verification complete.
+
+--- Phase 3: RTL Generation (Conceptual) ---
+With the .tflite model, you can now proceed to hardware deployment.
+This involves specialized tools like hls4ml (for FPGAs) or other hardware-specific compilers to translate the quantized model into Hardware Description Languages (Verilog/SystemVerilog/VHDL).
+This phase includes simulation with testbenches and eventual implementation on FPGA/ASIC for real-time inference.
+
+--- Conceptual: Quantization Aware Training (QAT) ---
+If the accuracy of the Post-Training Quantized model is not satisfactory,
+Quantization Aware Training (QAT) is the next step. This involves:
+1. Applying `tfmot.quantization.keras.quantize_model` to your original Keras model.
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+Sample 5: True Label: N, Predicted Label: N
+
+TFLite model verification complete.
+
+--- Phase 3: RTL Generation (Conceptual) ---
+With the .tflite model, you can now proceed to hardware deployment.
+This involves specialized tools like hls4ml (for FPGAs) or other hardware-specific compilers to translate the quantized model into Hardware Description Languages (Verilog/SystemVerilog/VHDL).
+This phase includes simulation with testbenches and eventual implementation on FPGA/ASIC for real-time inference.
+
+--- Conceptual: Quantization Aware Training (QAT) ---
+If the accuracy of the Post-Training Quantized model is not satisfactory,
+Quantization Aware Training (QAT) is the next step. This involves:
+1. Applying `tfmot.quantization.keras.quantize_model` to your original Keras model.
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+TFLite model verification complete.
+
+--- Phase 3: RTL Generation (Conceptual) ---
+With the .tflite model, you can now proceed to hardware deployment.
+This involves specialized tools like hls4ml (for FPGAs) or other hardware-specific compilers to translate the quantized model into Hardware Description Languages (Verilog/SystemVerilog/VHDL).
+This phase includes simulation with testbenches and eventual implementation on FPGA/ASIC for real-time inference.
+
+--- Conceptual: Quantization Aware Training (QAT) ---
+If the accuracy of the Post-Training Quantized model is not satisfactory,
+Quantization Aware Training (QAT) is the next step. This involves:
+1. Applying `tfmot.quantization.keras.quantize_model` to your original Keras model.
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+This involves specialized tools like hls4ml (for FPGAs) or other hardware-specific compilers to translate the quantized model into Hardware Description Languages (Verilog/SystemVerilog/VHDL).
+This phase includes simulation with testbenches and eventual implementation on FPGA/ASIC for real-time inference.
+
+--- Conceptual: Quantization Aware Training (QAT) ---
+If the accuracy of the Post-Training Quantized model is not satisfactory,
+Quantization Aware Training (QAT) is the next step. This involves:
+1. Applying `tfmot.quantization.keras.quantize_model` to your original Keras model.
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+If the accuracy of the Post-Training Quantized model is not satisfactory,
+Quantization Aware Training (QAT) is the next step. This involves:
+1. Applying `tfmot.quantization.keras.quantize_model` to your original Keras model.
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+2. Retraining the 'quantized' model for a few epochs. During this retraining,
+   the model learns weights that are robust to quantization effects.
+3. Converting the QAT-trained model to TFLite, which typically yields higher accuracy.
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+
+Example (conceptual, requires TensorFlow Model Optimization Toolkit):
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+ # quantized_model_for_qat.compile(...)
+ # import tensorflow_model_optimization as tfmot
+ # quantized_model_for_qat = tfmot.quantization.keras.quantize_model(model)
+ # quantized_model_for_qat.compile(...)
+ # quantized_model_for_qat.compile(...)
+ # quantized_model_for_qat.fit(X_train, y_train, ...)
+ # converter_qat = tf.lite.TFLiteConverter.from_keras_model(quantized_model_for_qat)
+ # converter_qat.optimizations = [tf.lite.Optimize.DEFAULT]
+ # tflite_qat_model = converter_qat.convert()

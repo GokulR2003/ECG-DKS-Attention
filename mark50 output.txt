@@ -1,0 +1,208 @@
+2025-07-27 15:40:34.104003: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-07-27 15:40:37.842926: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+WARNING:tensorflow:From c:\Users\gokul\OneDrive\Desktop\IITM\code\Mark1.py:24: The name tf.enable_v2_behavior is deprecated. Please use tf.compat.v1.enable_v2_behavior instead.
+
+--- Phase 1: Model Development and Training ---
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|███████████████████████████████████████████████████████████████████████████████████| 43/43 [03:11<00:00,  4.46s/it]
+
+Total heartbeats extracted: 102745
+  F: 798 (0.78%)
+  N: 87318 (84.99%)
+  Q: 4864 (4.73%)
+  S: 2750 (2.68%)
+  V: 7015 (6.83%)
+2025-07-27 15:44:03.854345: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Model: "functional"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ input_layer (InputLayer)             │ (None, 188, 1)              │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dks_block (DynamicKernelSwitching)   │ (None, 188, 64)             │           1,743 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ attention_mechanism (SelfAttention)  │ (None, 188, 128)            │          16,769 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv1d_3 (Conv1D)                    │ (None, 188, 128)            │          82,048 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling1d (MaxPooling1D)         │ (None, 94, 128)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ conv1d_4 (Conv1D)                    │ (None, 94, 256)             │         164,096 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ max_pooling1d_1 (MaxPooling1D)       │ (None, 47, 256)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ global_average_pooling1d             │ (None, 256)                 │               0 │
+│ (GlobalAveragePooling1D)             │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 256)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_5 (Dense)                      │ (None, 256)                 │          65,792 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_1 (Dropout)                  │ (None, 256)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_6 (Dense)                      │ (None, 5)                   │           1,285 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 331,733 (1.27 MB)
+ Trainable params: 331,733 (1.27 MB)
+ Non-trainable params: 0 (0.00 B)
+
+--- Model Training with Stable Callbacks ---
+Epoch 1/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 41s 33ms/step - accuracy: 0.3411 - loss: 1.3588 - val_accuracy: 0.5864 - val_loss: 1.0258 - learning_rate: 0.0010
+Epoch 2/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 39s 33ms/step - accuracy: 0.5364 - loss: 0.8230 - val_accuracy: 0.7821 - val_loss: 0.8125 - learning_rate: 0.0010
+Epoch 3/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 89s 77ms/step - accuracy: 0.6576 - loss: 0.6763 - val_accuracy: 0.8442 - val_loss: 0.6548 - learning_rate: 0.0010
+Epoch 4/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 74s 64ms/step - accuracy: 0.7335 - loss: 0.5947 - val_accuracy: 0.8617 - val_loss: 0.5913 - learning_rate: 0.0010
+Epoch 5/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 75s 65ms/step - accuracy: 0.7786 - loss: 0.5313 - val_accuracy: 0.8734 - val_loss: 0.5972 - learning_rate: 0.0010
+Epoch 6/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 65s 56ms/step - accuracy: 0.8010 - loss: 0.5024 - val_accuracy: 0.8611 - val_loss: 0.5386 - learning_rate: 0.0010
+Epoch 7/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 40s 34ms/step - accuracy: 0.8179 - loss: 0.4618 - val_accuracy: 0.8439 - val_loss: 0.4960 - learning_rate: 0.0010
+Epoch 8/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 46s 40ms/step - accuracy: 0.8278 - loss: 0.4355 - val_accuracy: 0.8982 - val_loss: 0.3833 - learning_rate: 0.0010
+Epoch 9/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 46s 39ms/step - accuracy: 0.8366 - loss: 0.3930 - val_accuracy: 0.8810 - val_loss: 0.4437 - learning_rate: 0.0010
+Epoch 10/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 45s 39ms/step - accuracy: 0.8400 - loss: 0.3948 - val_accuracy: 0.8803 - val_loss: 0.3971 - learning_rate: 0.0010
+Epoch 11/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 82s 39ms/step - accuracy: 0.8349 - loss: 0.3958 - val_accuracy: 0.8729 - val_loss: 0.3677 - learning_rate: 0.0010
+Epoch 12/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 55s 47ms/step - accuracy: 0.8492 - loss: 0.3631 - val_accuracy: 0.8916 - val_loss: 0.4238 - learning_rate: 0.0010
+Epoch 13/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 47s 41ms/step - accuracy: 0.8496 - loss: 0.3676 - val_accuracy: 0.9133 - val_loss: 0.2927 - learning_rate: 0.0010
+Epoch 14/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 46s 40ms/step - accuracy: 0.8491 - loss: 0.3660 - val_accuracy: 0.7793 - val_loss: 0.6310 - learning_rate: 0.0010
+Epoch 15/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 47s 41ms/step - accuracy: 0.8592 - loss: 0.3373 - val_accuracy: 0.8747 - val_loss: 0.4202 - learning_rate: 0.0010
+Epoch 16/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 74s 34ms/step - accuracy: 0.8602 - loss: 0.3243 - val_accuracy: 0.8920 - val_loss: 0.3736 - learning_rate: 0.0010
+Epoch 17/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 47s 41ms/step - accuracy: 0.8791 - loss: 0.3002 - val_accuracy: 0.9072 - val_loss: 0.3048 - learning_rate: 2.0000e-04
+Epoch 18/50
+1156/1156 ━━━━━━━━━━━━━━━━━━━━ 47s 40ms/step - accuracy: 0.8815 - loss: 0.2780 - val_accuracy: 0.8994 - val_loss: 0.3142 - learning_rate: 2.0000e-04
+
+--- Final Model Evaluation ---
+643/643 ━━━━━━━━━━━━━━━━━━━━ 5s 8ms/step    
++-----------------+----------------+
+| Metric          | Value          |
++-----------------+----------------+
+| Test Loss       | 0.2901         |
+| Test Accuracy   | 0.9201         |
+| Precision       | 0.9467         |
+| Recall          | 0.9201         |
+| F1-Score        | 0.9295         |
++-----------------+----------------+
+
+--- Detailed Classification Report (Per Class) ---
+              precision    recall  f1-score   support
+
+           F       0.59      0.82      0.69       159
+           N       0.99      0.93      0.96     17464
+           Q       0.72      0.88      0.79       973
+           S       0.36      0.83      0.50       550
+           V       0.87      0.91      0.89      1403
+
+    accuracy                           0.92     20549
+   macro avg       0.70      0.87      0.77     20549
+weighted avg       0.95      0.92      0.93     20549
+
+
+--- Phase 3: Saving and Quantizing Model ---
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`.      
+Model saved to saved_models\ecg_final_model_stable.h5
+
+--- Phase 4: Model Quantization ---
+Attempting Post-Training Full Integer Quantization (INT8 input/output).
+WARNING:absl:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+Model loaded successfully for quantization!
+
+--- Starting Post-Training Full Integer Quantization ---
+Preparing a representative dataset for quantization calibration...
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|█████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:27<00:00,  5.43s/it] 
+
+Total heartbeats extracted: 11028
+  N: 10214 (92.62%)
+  Q: 214 (1.94%)
+  S: 38 (0.34%)
+  V: 562 (5.10%)
+Saved artifact at 'C:\Users\gokul\AppData\Local\Temp\tmpx3m5y2p_'. The following endpoints are available:
+
+* Endpoint 'serve'
+  args_0 (POSITIONAL_ONLY): TensorSpec(shape=(None, 188, 1), dtype=tf.float32, name='input_layer')
+Output Type:
+  TensorSpec(shape=(None, 5), dtype=tf.float32, name=None)
+Captures:
+  2563414732304: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414721552: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414721168: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416520272: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416520464: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416520656: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416520080: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416519120: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416518928: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416518736: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414723856: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414734224: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414734416: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414731728: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414731536: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414734032: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414730576: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414732112: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414733072: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414723472: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414731152: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563414730192: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416522384: TensorSpec(shape=(), dtype=tf.resource, name=None)
+  2563416521232: TensorSpec(shape=(), dtype=tf.resource, name=None)
+C:\Users\gokul\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\convert.py:854: UserWarning: Statistics for quantized inputs were expected, but not specified; continuing anyway.
+  warnings.warn(
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+W0000 00:00:1753612285.929603   13352 tf_tfl_flatbuffer_helpers.cc:365] Ignored output_format.
+W0000 00:00:1753612285.930935   13352 tf_tfl_flatbuffer_helpers.cc:368] Ignored drop_control_dependency.
+2025-07-27 16:01:25.933398: I tensorflow/cc/saved_model/reader.cc:83] Reading SavedModel from: C:\Users\gokul\AppData\Local\Temp\tmpx3m5y2p_
+2025-07-27 16:01:25.939208: I tensorflow/cc/saved_model/reader.cc:52] Reading meta graph with tags { serve }
+2025-07-27 16:01:25.939389: I tensorflow/cc/saved_model/reader.cc:147] Reading SavedModel debug info (if present) from: C:\Users\gokul\AppData\Local\Temp\tmpx3m5y2p_
+I0000 00:00:1753612285.954003   13352 mlir_graph_optimization_pass.cc:425] MLIR V1 optimization pass is not enabled
+2025-07-27 16:01:25.956228: I tensorflow/cc/saved_model/loader.cc:236] Restoring SavedModel bundle.
+2025-07-27 16:01:26.029585: I tensorflow/cc/saved_model/loader.cc:220] Running initialization op on SavedModel bundle at path: C:\Users\gokul\AppData\Local\Temp\tmpx3m5y2p_
+2025-07-27 16:01:26.050300: I tensorflow/cc/saved_model/loader.cc:471] SavedModel load for tags { serve }; Status: success: OK. Took 117267 microseconds.
+2025-07-27 16:01:26.098124: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+fully_quantize: 0, inference_type: 6, input_inference_type: INT8, output_inference_type: INT8
+
+Post-Training Full Integer Quantization successful!
+Quantized model saved to: saved_models\ecg_model_quantized_int8.tflite
+
+--- Verifying Quantized TFLite Model ---
+C:\Users\gokul\AppData\Local\Programs\Python\Python312\Lib\site-packages\tensorflow\lite\python\interpreter.py:457: UserWarning:     Warning: tf.lite.Interpreter is deprecated and is scheduled for deletion in
+    TF 2.20. Please use the LiteRT interpreter from the ai_edge_litert package.
+    See the [migration guide](https://ai.google.dev/edge/litert/migration)
+    for details.
+
+  warnings.warn(_INTERPRETER_DELETION_WARNING)
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+TFLite Input Details: [{'name': 'serving_default_input_layer:0', 'index': 0, 'shape': array([  1, 188,   1]), 'shape_signature': array([ -1, 188,   1]), 'dtype': <class 'numpy.int8'>, 'quantization': (0.03127242624759674, -61), 'quantization_parameters': {'scales': array([0.03127243], dtype=float32), 'zero_points': array([-61]), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+TFLite Output Details: [{'name': 'StatefulPartitionedCall_1:0', 'index': 94, 'shape': array([1, 5]), 'shape_signature': array([-1,  5]), 'dtype': <class 'numpy.int8'>, 'quantization': (0.00390625, -128), 'quantization_parameters': {'scales': array([0.00390625], dtype=float32), 'zero_points': array([-128]), 'quantized_dimension': 0}, 'sparsity_parameters': {}}]
+Loading test data for TFLite model verification...
+Using R-peak detector: ANNOTATION
+Processing MIT-BIH Records: 100%|█████████████████████████████████████████████████████████████████████████████████████| 5/5 [00:24<00:00,  4.93s/it] 
+
+Total heartbeats extracted: 10838
+  F: 4 (0.04%)
+  N: 10681 (98.55%)
+  Q: 85 (0.78%)
+  S: 12 (0.11%)
+  V: 56 (0.52%)
+
+Running inference on 5 test samples with TFLite model...
+Sample 1: True Label: Q, Predicted Label: S
+Sample 2: True Label: N, Predicted Label: S
+Sample 3: True Label: N, Predicted Label: S
+Sample 4: True Label: N, Predicted Label: S
+Sample 5: True Label: N, Predicted Label: S
